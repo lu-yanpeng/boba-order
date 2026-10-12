@@ -1,0 +1,25 @@
+# 默认按内容判断文本，检出统一使用 LF
+* text=auto eol=lf
+
+# 二进制文件
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.ttf binary
+*.eot binary
+*.mp3 binary
+*.mp4 binary
+
+# Windows 脚本保留 CRLF
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+# 锁文件折叠 diff，PR 页面更清爽
+pnpm-lock.yaml -diff
+package-lock.json -diff
+yarn.lock -diff

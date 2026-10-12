@@ -1,0 +1,31 @@
+#!/bin/sh
+# pre-commit：分支名规范检查（兜底）
+#
+# 启用（每个克隆执行一次）：
+#   git config core.hooksPath .githooks
+#
+# 规则：
+#   - 不允许直接在 main 上提交
+#   - 分支名必须以 feat/ fix/ refactor/ docs/ chore/ test/ 开头
+#   - detached HEAD（如 rebase 过程中）不检查
+#   - 应急跳过：git commit --no-verify
+
+branch=$(git symbolic-ref --short -q HEAD 2>/dev/null)
+[ -z "$branch" ] && exit 0
+
+if [ "$branch" = "main" ]; then
+  echo "✖ 不能直接在 main 上提交：main 受保护，请先创建功能分支。"
+  echo "  例如：git switch -c chore/xxx"
+  exit 1
+fi
+
+case "$branch" in
+  feat/* | fix/* | refactor/* | docs/* | chore/* | test/*)
+    exit 0
+    ;;
+esac
+
+echo "✖ 分支名不符合规范：$branch"
+echo "  允许的前缀：feat/ fix/ refactor/ docs/ chore/ test/"
+echo "  示例：feat/cart-checkout"
+exit 1

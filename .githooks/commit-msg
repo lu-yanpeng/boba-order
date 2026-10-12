@@ -1,0 +1,31 @@
+#!/bin/sh
+# commit-msg：提交信息规范检查（兜底）
+#
+# 启用（每个克隆执行一次）：
+#   git config core.hooksPath .githooks
+#
+# 规则：首行必须为 <type>: <描述>
+#   - type 可选：feat fix docs refactor chore test
+#   - 支持可选 scope，如 feat(miniprogram): 描述
+#   - Merge / Revert / fixup! / squash! 自动放行
+#   - 应急跳过：git commit --no-verify
+
+msg_file=$1
+first_line=$(grep -v '^#' "$msg_file" | sed '/^[[:space:]]*$/d' | head -n1)
+
+# Git 自动生成的信息放行
+case "$first_line" in
+  Merge\ * | Revert\ * | fixup!\ * | squash!\ * | '')
+    exit 0
+    ;;
+esac
+
+if printf '%s\n' "$first_line" | grep -Eq '^(feat|fix|docs|refactor|chore|test)(\([a-zA-Z0-9._/-]+\))?: .+'; then
+  exit 0
+fi
+
+echo "✖ 提交信息不符合规范：$first_line"
+echo "  格式：<type>: <描述>（可选 scope，如 feat(miniprogram): 描述）"
+echo "  type 可选：feat fix docs refactor chore test"
+echo "  示例：feat: 增加购物车结算接口"
+exit 1
