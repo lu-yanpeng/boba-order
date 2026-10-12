@@ -7,6 +7,12 @@
       "skillPath": "skills/bmad/SKILL.md",
       "computedHash": "7bffdf34becd1b32459b54179e9e6711052516d0a3cae04f8d490da25f580f05"
     },
+    "bmad-advanced-elicitation": {
+      "source": "bmad-code-org/BMAD-METHOD",
+      "sourceType": "github",
+      "skillPath": "skills/bmad-advanced-elicitation/SKILL.md",
+      "computedHash": "1b2e49c37fba7ce6bff6b267bc4debeea846fba8e8dc76437cd6b77fefa3cafe"
+    },
     "bmad-architecture": {
       "source": "bmad-code-org/BMAD-METHOD",
       "sourceType": "github",
