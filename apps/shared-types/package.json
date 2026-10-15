@@ -1,0 +1,17 @@
+{
+  "name": "@boba/shared-types",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Supabase 生成类型单源（`supabase gen types` 产物，勿手写）。",
+  "type": "module",
+  "types": "./database.types.ts",
+  "exports": {
+    ".": {
+      "types": "./database.types.ts",
+      "default": "./database.types.ts"
+    }
+  },
+  "files": [
+    "database.types.ts"
+  ]
+}

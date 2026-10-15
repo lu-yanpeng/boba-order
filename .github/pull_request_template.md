@@ -4,7 +4,7 @@
 
 ## 影响范围
 
-- [ ] 小程序 `apps/miniapp`
+- [ ] 小程序 `apps/mp`
 - [ ] 后台管理 `apps/admin`
 - [ ] 后端 / 数据库 `supabase`
 

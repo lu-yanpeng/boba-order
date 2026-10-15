@@ -3,7 +3,8 @@
   "extends": "@vben/tsconfig/web-app.json",
   "compilerOptions": {
     "paths": {
-      "#/*": ["./src/*"]
+      "#/*": ["./src/*"],
+      "@boba/shared-types": ["../../../shared-types/database.types.ts"]
     }
   },
   "references": [{ "path": "./tsconfig.node.json" }],

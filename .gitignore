@@ -2,3 +2,12 @@
 .vscode
 _bmad/
 _bmad-output/
+
+# 依赖（各 app 目录另有自己的 .gitignore；这行给仓库根与共享包兜底）
+node_modules/
+
+# 本地环境（单源配置，见 .env.example）—— 仅限仓库根，别吞掉子树里的 per-app .env
+/.env
+/.env.keys
+/.env.local
+/.env.*.local
