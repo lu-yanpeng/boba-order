@@ -89,6 +89,19 @@ supabase db reset                              # 从迁移＋种子重建，验�
 
 声明式链路跑不通时退手写迁移（`supabase migration new`），结论记录在本计划的 Implementation Notes。
 
+## 定时基座（pg_cron，实测）
+
+本地栈**可用**（2026-10-17 实测）：`pg_cron` 1.6.4 随镜像预加载；扩展声明在 `supabase/schemas/cron.sql`
+（`create extension if not exists pg_cron`），随重建自动就位；试验作业按分触发、`cron.job_run_details` 留有
+`succeeded` 记录，随后撤除（仓库不留作业）。限制与记法：调度时区锁 GMT——门店 0 点＝`0 16 * * *`
+（UTC+8 当天 00:00）；作业跑在 `postgres` 库；`db reset` 会清空 `cron.job`（作业是数据、非结构，
+重建后需随迁移/种子重排）。
+
+```bash
+supabase db query --local "select jobid, jobname, schedule, active from cron.job;"                     # 查当前作业
+supabase db query --local "select jobname, status, start_time, return_message from cron.job_run_details join cron.job using (jobid) order by start_time desc limit 5;"  # 查执行记录
+```
+
 ## 启用 Git hooks（每个克隆一次）
 
 提交信息与分支名规范由 `.githooks/` 提供，需显式启用：
