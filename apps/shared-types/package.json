@@ -2,6 +2,9 @@
   "name": "@boba/shared-types",
   "version": "0.0.0",
   "private": true,
+  "scripts": {
+    "gen:types": "node ../../supabase/scripts/gen-types.mjs"
+  },
   "description": "Supabase 生成类型单源（`supabase gen types` 产物，勿手写）。",
   "type": "module",
   "types": "./database.types.ts",

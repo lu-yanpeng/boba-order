@@ -9,7 +9,7 @@ apps/mp/           顾客端小程序（uni-app 官方模板）
 apps/admin/        商家后台（Vben Admin 5.x 子树，web-tdesign 变体）
 apps/shared-types/ Supabase 生成类型单源（@boba/shared-types，勿手写）
 supabase/          后端定义：declarative schema / 迁移 / 种子 / 配置
-supabase/scripts/  基座冒烟脚本（HTTP 级；SQL 级测试以后放 supabase/tests/）
+supabase/scripts/  基座脚本：冒烟（HTTP 级）＋ 类型再生成（gen-types.mjs）
 docs/              台账：Vben 子树同步（vben-sync.md）
 ```
 
@@ -42,17 +42,20 @@ cp .env.example .env
 
 ## 生成类型（单源）
 
-类型**一律生成、不手写**，产物入库跟踪：
+类型**一律生成、不手写**，产物入库跟踪。本地栈已起时，在仓库根执行：
 
 ```bash
-supabase gen types --local --lang typescript > apps/shared-types/database.types.ts
+pnpm --dir apps/shared-types run gen:types
 ```
 
-两端（`apps/mp`、`apps/admin/apps/web-tdesign`）经 tsconfig `paths` 别名 `@boba/shared-types` 消费该产物；
-正式化的再生成脚本入口归条目 1.4。
+流程：`supabase gen types --local --lang typescript` 生成 → 仓库 pin 的 oxfmt
+（`apps/admin/node_modules/.bin/oxfmt`，故 `apps/admin` 依赖须已安装）格式化 → 成功后才原子写入
+`apps/shared-types/database.types.ts`。栈未起、生成失败或 oxfmt 缺失时报错退出、不动现有产物
+（勿手改产物；勿用 `npx oxfmt`，版本不同会改坏形态）。
 
-> 生成物默认未格式化（CLI 会提示）；如需统一风格，用仓库 pin 的 oxfmt：
-> `./apps/admin/node_modules/.bin/oxfmt apps/shared-types/database.types.ts`（勿用 `npx oxfmt`，会拉到不同版本、产出不一致）。
+改 `supabase/schemas/` 后的再生成路径：改 schema → `supabase db schema declarative sync --apply` →
+上面的 `gen:types`（迁移口径见「迁移风格（声明式，实测）」节）。两端（`apps/mp`、`apps/admin/apps/web-tdesign`）经 tsconfig `paths`
+别名 `@boba/shared-types` 消费该产物。
 
 ## 冒烟
 
